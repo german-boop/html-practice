@@ -1,0 +1,28 @@
+name: HTML Workflow
+
+on:
+  push:
+    branches:
+      - main
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: List files
+        run: ls -R
+
+      - name: Generate SLSA Provenance
+        uses: slsa-framework/slsa-generic-generator@v0.3
+        with:
+          build-type: 'github-release'
+          output: 'provenance.json'
+
+      - name: Show provenance
+        run: cat provenance.json
